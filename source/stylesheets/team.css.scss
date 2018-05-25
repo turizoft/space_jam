@@ -1,0 +1,601 @@
+@function stars($n, $opacity) {
+  $value: '#{random(2000)}px #{random(2000)}px rgba(255, 255, 255, #{$opacity})';
+  @for $i from 2 through $n {
+    $value: '#{$value}, #{random(2000)}px #{random(2000)}px rgba(255, 255, 255, #{$opacity})';
+  }
+  @return unquote($value);
+}
+
+@keyframes stars-animation {
+  from {
+    transform: translateY(0px)
+  }
+  to {
+    transform: translateY(-2000px)
+  }
+}
+
+@for $i from 1 through 3 {
+  #stars-#{$i} {
+    animation: stars-animation #{50 * $i}s linear infinite;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 300vh;
+      z-index: 1;
+    }
+    &, &:after {
+      border-radius: 50%;
+      width: #{$i}px;
+      height: #{$i}px;
+      box-shadow: stars((10 - $i * $i) * 100, $i * 0.333);
+      background: transparent;
+    }
+  }
+}
+
+$cursive: 'Slackey', cursive;
+$sans: 'Tajawal', sans-serif;
+
+$yellow: #fffa21;
+
+$bouncy-anim: cubic-bezier(.15, .08, .15, 1.45);
+$decay-anim: cubic-bezier(.15, .08, .15, 1.45);
+$t: 0.4s;
+
+@function white($opacity) {
+  @return rgba(255, 255, 255, $opacity);
+}
+
+@function black($opacity) {
+  @return rgba(0, 0, 0, $opacity);
+}
+
+body {
+  background: #040a1b;
+  font-family: $cursive;
+  font-size: 12px;
+}
+
+[v-cloak] {
+  display: none !important;
+}
+
+#vue-app {
+  overflow: hidden;
+  position: relative;
+}
+
+.container {
+  margin: 0 auto;
+  width: 1024px;
+}
+
+.flex-columns {
+  display: flex;
+  flex-direction: columns;
+
+  & > * {
+    margin: 0 1rem;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.sections-container {
+  .page-section {
+    backface-visibility: hidden;
+    transition: transform $t ease-in-out, opacity $t * 1.5 ease-in-out;
+    &:not(.active) {
+      position: absolute;
+      transform: translateY(20rem);
+      opacity: 0;
+    }
+  }
+}
+
+
+.btn {
+  background: #00a2c9;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  font-family: $cursive;
+  font-size: 1.25rem;
+  padding: 0.2rem 2.5rem;
+}
+
+.paragraph {
+  color: white;
+  font-size: 1rem;
+  line-height: 1.1rem;
+  &.small {
+    font-size: 0.9rem;
+    line-height: 1.05rem;
+  }
+}
+
+.main-subtitle {
+  color: white(0.5);
+  font-family: $cursive;
+  font-size: 1.125rem;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+
+.sidebar-subtitle {
+  color: white(0.7);
+  font-family: $cursive;
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+
+header {
+  color: white;
+  height: 27rem;
+  position: relative;
+  margin-top: -6px;
+
+  .background-container {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+
+    &:after {
+      background-image: linear-gradient(black(0), black(0.7));
+      content: '';
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      transition: opacity $t ease-in-out;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .background-picture {
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      transition: opacity $t * 0.9 ease-in-out, transform $t * 0.9 ease-in-out;
+      width: 100%;
+      &.active {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+
+    &.when-trips:after, &.when-places:after {
+      opacity: 1;
+    }
+  }
+
+  nav {
+    background-image: linear-gradient(black(0.6), black(0));
+    padding: 1rem 0;
+    position: relative;
+    z-index: 1;
+    ul {
+      li {
+        color: rgba(255, 255, 255, 0.66);
+        cursor: pointer;
+        display: inline;
+        font-family: $cursive;
+        font-size: 1.1rem;
+        margin: 1rem;
+        &.active {
+          color: white;
+        }
+        &:first-child {
+          margin-left: 0;
+        }
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  .dot-menu {
+    display: none;
+  }
+}
+
+.subheader {
+  height: 8.6rem;
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+
+  .container {
+    border-bottom: 1px solid white(0.15);
+    padding-bottom: 1rem;
+    transition: border-color 0.2s ease-in-out;
+  }
+
+  h1, h2, .profile-pictures, .profile-picture, .main-btn, .profile-description, .profile-stats {
+    backface-visibility: hidden;
+  }
+
+  .profile-info {
+    flex: 3;
+    position: relative;
+    z-index: 2;
+
+    h1 {
+      color: $yellow;
+      bottom: 0;
+      font-family: $cursive;
+      font-size: 2rem;
+      left: 0;
+      position: absolute;
+      transition: transform $t ease-in-out, scale $t ease-in-out, opacity 0.2s ease-in-out;
+      transform-origin: 0 100%;
+    }
+
+    h2 {
+      color: white;
+      font-family: $cursive;
+      font-size: 2rem;
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      top: -2rem - 1 - 1; /* -self - subheader gap - header gap */
+      transition: transform $t ease-in-out, opacity 0.2s ease-in-out;
+      transform: translateY(3rem);
+    }
+
+    .profile-pictures {
+      bottom: 3rem /* h1 */ + 1 /* h1 gap */;
+      position: absolute;
+      transition: transform $t ease-in-out, scale $t ease-in-out;
+      transform-origin: 0 100%;
+      z-index: 2;
+      display: flex;
+
+      .profile-picture {
+        background-size: cover;
+        background-repeat: no-repeat;
+        border: 6px solid #040a1b;
+        border-radius: 3px;
+        bottom: 0;
+        float: left;
+        height: 12rem;
+        pointer-events: none;
+        position: absolute;
+        width: 12rem;
+
+        &.user-order-1 {
+          transition: transform $t $bouncy-anim, border-radius $t * 0.75 linear;
+        }
+
+        &:not(.user-order-1) {
+          opacity: 0;
+          transition: transform $t $bouncy-anim, opacity 0s;
+        }
+      }
+    }
+
+    .main-btn {
+      bottom: 3rem + 1;
+      height: 2.5rem;
+      left: 12rem;
+      margin-left: 1.5rem;
+      margin-bottom: 6px;
+      position: absolute;
+      transition: transform $t ease-in-out, opacity 0.2s ease-in-out;
+      width: 12.6rem * 0.75; /* parent scaled */
+    }
+  }
+
+  .profile-description {
+    color: white;
+    flex: 3;
+    font-size: 1rem;
+    transition: transform $t ease-in-out, opacity 0.2s ease-in-out;
+  }
+
+  .profile-stats {
+    flex: 2;
+    transition: transform $t ease-in-out, opacity 0.2s ease-in-out;
+    .profile-stat {
+      display: flex;
+      flex-direction: column;
+      h3 {
+        font-size: 1.25rem;
+        color: white(0.6);
+      }
+      p {
+        font-weight: bold;
+        color: white;
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  &.when-places {
+    h1 {
+      color: white;
+      /* picture scaled + picture gap, -parent - parent gap - btn align adjust */
+      transform: translate(12rem * 0.75 + 1.5, -8.6rem - 1 - 0.5)
+                 scale(0.75);
+    }
+
+    .profile-pictures {
+      /* -parent + h1 + h1 gap - parent gap - main-btn - main-btn-gap */
+      transform: translateY(-8.6rem + 3 + 1 - 1 - 2.5 - 1)
+                 scale(0.75);
+    }
+
+    .main-btn {
+      /* -picture - picture gap, -parent + h1 + h1 gap - parent gap */
+      transform: translate(-12rem - 1.5, -8.6rem + 3 + 1 - 1);
+    }
+  }
+
+  &.when-trips {
+    h1 {
+      color: white;
+      opacity: 0;
+      /* 0, -parent - parent gap - btn align adjust - picture scaled 50% origin + picture gap */
+      transform: translate(0, -8.6rem - 1 - 0.5 - 12rem * 0.75 * 0.5 + 1)
+                 scale(0.2);
+    }
+
+    h2 {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .profile-pictures {
+      /* -parent + h1 + h1 gap - parent gap - main-btn - main-btn-gap */
+      transform: translateY(-8.6rem + 3 + 1 - 1 - 2.5 - 1)
+                 scale(0.25);
+
+      .profile-picture {
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+
+        &:not(.user-order-1) {
+          opacity: 1;
+          transition: transform $t $bouncy-anim, opacity $t * 2 ease-in-out;
+        }
+
+        &.shown {
+          pointer-events: auto;
+        }
+
+        @for $i from 2 through 6 {
+          &.user-order-#{$i} {
+            transform: translate((12rem + 1 + 0.5 * 4) * ($i - 1));
+
+            &:hover {
+              transform: translate((12rem + 1 + 0.5 * 4) * ($i - 1))
+                         scale(1.1);
+            }
+
+            &:not(.shown) {
+              transition-delay: $t * (($i - 1) * 0.75 + 0.5);
+            }
+          }
+        }
+      }
+    }
+
+    .main-btn {
+      opacity: 0;
+      /* -picture - (picture gap + self scaled) 50% origin, -parent + h1 + h1 gap - parent gap - picture scaled 50% origin + picture gap */
+      transform: translate(-12rem - (1.5 + 12rem * 0.75) * 0.5, -8.6rem + 3 + 1 - 1 - 12rem * 0.75 * 0.5 + 1)
+                 scale(0.2);
+    }
+  }
+
+  &.when-places, &.when-trips {
+    .container {
+      border-color: white(0);
+    }
+    .profile-description, .profile-stats {
+      opacity: 0;
+      transform: translateY(-8.6rem); /* -parent */
+    }
+  }
+}
+
+#profile-section {
+  .profile-places {
+    flex: 2;
+
+    .profile-place {
+      display: flex;
+      padding: 1rem 0;
+
+      .place-picture {
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 10rem;
+        margin-right: 1rem;
+        width: 10rem;
+      }
+
+      .place-details {
+        flex: 1;
+
+        h2 {
+          color: white(0.8);
+          font-size: 1.4rem;
+          font-weight: bold;
+          margin-bottom: 0.4rem;
+        }
+
+        .rating {
+          color: white(0.45);
+          display: block;
+          font-size: 1.15rem;
+          margin-bottom: 0.4rem;
+        }
+      }
+    }
+  }
+
+  .profile-locations {
+    flex: 1;
+
+    p {
+      margin-top: 1em;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+#places-section {
+  margin-top: -9rem;
+
+  .main-place-details {
+    flex: 2;
+
+    h2 {
+      color: $yellow;
+      border-bottom: 1px solid white(0.15);
+      font-family: $cursive;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem
+    }
+
+    .rating {
+      color: white(0.75);
+      display: block;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .place-picture {
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 25vh;
+      margin-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    table {
+      margin-top: 2rem;
+      color: white(0.8);
+      font-size: 1rem;
+
+      b { color: white; }
+      td { padding: 0.2rem; }
+    }
+  }
+  .other-places {
+    flex: 1;
+
+    h2 {
+      color: white(0.5);
+      font-family: $cursive;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .place {
+      display: flex;
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+
+      .place-picture {
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 5rem;
+        margin-right: 0.5rem;
+        width: 5rem;
+      }
+
+      .place-details {
+        flex: 1;
+      }
+    }
+  }
+}
+
+#group-section {
+  margin-top: -9rem;
+
+  .group-trip {
+    flex: 2;
+
+    h2 {
+      border-bottom: 1px solid white(0.15);
+      font-family: $cursive;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      color: $yellow;
+    }
+
+    .paragraph {
+      margin-bottom: 1em;
+    }
+
+    .trip-pictures {
+      display: grid;
+      grid-gap: 0.5rem;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas:
+        "a a a a"
+        "b b c c"
+        "b b d e";
+      height: 25rem;
+
+      .trip-picture {
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    }
+  }
+  .trip-schedule {
+    background: white(0.025);
+    flex: 1;
+    padding: 2rem;
+
+    h3 {
+      margin-bottom: 1rem;
+    }
+
+    h4 {
+      color: white(0.5);
+      font-size: 1.1rem;
+      margin-bottom: 0.66rem;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+footer {
+  margin-top: 2rem;
+  padding: 2rem;
+
+  p {
+    font-family: $sans;
+    color: white(0.66);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+}

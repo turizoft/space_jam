@@ -1,0 +1,19 @@
+{
+  "name": "space_jam",
+  "dependencies": {
+    "vue": "^2.5.16",
+    "cash": "^1.3.7",
+    "lodash": "^4.17.10"
+  },
+  "description": "A redesign of the legendary Space Jam website",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

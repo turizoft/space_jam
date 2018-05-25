@@ -1,0 +1,185 @@
+---
+title: Space Jam - The Lineup
+layout: team
+---
+
+<script>
+  window.user_images = [];
+  <% (1..6).each do |i| %>
+    user_images.push('<%= asset_url "images/team/#{i}.jpg" %>');
+  <% end %>
+</script>
+
+<div id="vue-app" v-cloak>
+  <div id="stars-1"></div>
+  <div id="stars-2"></div>
+  <div id="stars-3"></div>
+
+  <header>
+    <div :class="['background-container', current_page_class]">
+      <div :class="['background-picture', {active: page_is('home')}]" style="background-image: url(<%= asset_url 'images/team_bg/2.jpg' %>)"></div>
+      <div :class="['background-picture', {active: page_is('places')}]" style="background-image: url(<%= asset_url 'images/team_bg/3.jpg' %>)"></div>
+      <div :class="['background-picture', {active: page_is('trips')}]" style="background-image: url(<%= asset_url 'images/team_bg/1.jpg' %>)"></div>
+    </div>
+    <nav>
+      <div class="container">
+        <ul>
+          <li @click="goto('/')">Home</li>
+          <li :class="[{active: page_is('trips')}]" @click="select_page('trips')">The Lineup</li>
+          <li :class="[{active: page_is('home')}]" @click="select_page('home')">{{ current_user.name }}'s Profile</li>
+          <li :class="[{active: page_is('places')}]" @click="select_page('places')">{{ current_user.name }}'s Stats</li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <div :class="['subheader', current_page_class]">
+    <div class="container flex-columns">
+      <div class="profile-info">
+        <div class="profile-pictures">
+          <div v-for="user in users"
+               :class="['profile-picture', order_class_for(user), {shown: group_list_shown}]"
+               :style="{ 'background-image': image_url_for(user) }"
+               @click="onSelectUser(user)"
+          >
+          </div>
+        </div>
+        <h1 class="profile-name">{{ current_user.name }} {{ current_user.surname }}</h1>
+        <button class="btn main-btn">Vote</button>
+
+        <h2 class="trips-title">The Lineup</h2>
+      </div>
+
+      <p class="profile-description">Cui Tubuli nomen odio non est? Sed quot homines, tot sententiae; Qui non moveatur et offensione turpitudinis et comprobatione honestatis? Inde igitur, inquit, ordiendum est. Itaque eos id agere, ut a se dolores, morbos, debilitates repellant.</p>
+
+      <div class="profile-stats flex-columns">
+        <div class="profile-stat">
+          <h3>Height</h3>
+          <p>{{ current_user.height }}</p>
+        </div>
+        <div class="profile-stat">
+          <h3>Weight</h3>
+          <p>{{ current_user.weight }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sections-container container">
+    <section id="profile-section" :class="['page-section', {active: page_is('home')}]">
+      <div class="container flex-columns">
+          <div class="profile-places">
+            <div class="profile-place">
+              <div class="place-details">
+                <h2>Early NBA years</h2>
+                <b class="rating">1984–87</b>
+                <p class="paragraph">Cui Tubuli nomen odio non est? Sed quot homines, tot sententiae; Qui non moveatur et offensione turpitudinis et comprobatione honestatis? Inde igitur, inquit, ordiendum est. Itaque eos id agere, ut a se dolores, morbos, debilitates repellant.</p>
+              </div>
+            </div>
+            <div class="profile-place">
+              <div class="place-details">
+                <h2>Chicago</h2>
+                <b class="rating">1984-98</b>
+                <p class="paragraph">Ergo id est convenienter naturae vivere, a natura discedere. Fatebuntur Stoici haec omnia dicta esse praeclare, neque eam causam Zenoni desciscendi fuisse.</p>
+              </div>
+            </div>
+            <div class="profile-place">
+              <div class="place-details">
+                <h2>Washington</h2>
+                <b class="rating">2001-03</b>
+                <p class="paragraph">An ea, quae per vinitorem antea consequebatur, per se ipsa curabit? Duo Reges: constructio interrete. Longum est enim ad omnia respondere, quae a te dicta sunt. Istic sum, inquit.</p>
+              </div>
+            </div>
+          </div>
+          <div class="profile-locations">
+            <h3 class="sidebar-subtitle">Bio</h3>
+            <p class="paragraph small">Omnia contraria, quos etiam insanos esse vultis. Sed in rebus apertissimis nimium longi sumus. Quodsi, ne quo incommodo afficiare, non relinques amicum, tamen, ne sine fructu alligatus sis, ut moriatur optabis. Ergo hoc quidem apparet, nos ad agendum esse natos. Occultum facinus esse potuerit, gaudebit; Ex rebus enim timiditas, non ex vocabulis nascitur. Esse enim quam vellet iniquus iustus poterat inpune.</p>
+          </div>
+        </div>
+      </section>
+
+    <section id="places-section" :class="['page-section', {active: page_is('places')}]">
+      <div class="container flex-columns">
+        <div class="main-place-details">
+          <h3 class="main-subtitle">Player Stats</h3>
+          <h2>{{ current_user.name }} {{ current_user.surname }}</h2>
+          <b class="rating">&#9733;&nbsp;&#9733;&nbsp;&#9733;&nbsp;&#9733;&nbsp;&#9733;</b>
+
+          <p class="paragraph stats">
+            <table>
+              <tbody>
+                <tr>
+                  <td><b>Season</b></td> <td><b>G</b></td> <td><b>Min</b></td> <td><b>FG</b></td> <td><b>3pt</b></td> <td><b>FT</b></td> <td><b>Reb</b></td> <td><b>Ast</b></td> <td><b>Stl</b></td> <td><b>Blk</b></td> <td><b>Tot</b></td> <td><b>PG</b></td>
+                </tr>
+                <% (84..98).each do |y| %>
+                  <tr>
+                    <td><%= "#{y}-#{y + 1}" %></td>
+                    <% (1..11).each do %>
+                    <td><%= rand(10..999) %></td>
+                    <% end %>
+                  </tr>
+                <% end %>
+                <tr>
+                  <td>Career</td> <td>377</td> <td>14635</td> <td>.496</td> <td>.347</td> <td>.771</td> <td>3479</td> <td>1553</td> <td>296</td> <td>163</td> <td>7405</td> <td>19.6</td>
+                </tr>
+              </tbody>
+            </table>
+          </p>
+        </div>
+
+        <div class="other-places">
+          <h2>Other Data</h2>
+          <div class="place">
+            <div class="place-details">
+              <h3 class="sidebar-subtitle">MVP</h3>
+              <p class="paragraph small">Cui Tubuli nomen odio non est? Sed quot homines, tot sententiae; Qui non moveatur et offensione turpitudinis et comprobatione honestatis? Inde igitur, inquit, ordiendum est. Itaque eos id agere, ut a se dolores, morbos, debilitates repellant.</p>
+            </div>
+          </div>
+          <div class="place">
+            <div class="place-details">
+              <h3 class="sidebar-subtitle">Play Offs</h3>
+              <p class="paragraph small">Ergo id est convenienter naturae vivere, a natura discedere. Fatebuntur Stoici haec omnia dicta esse praeclare, neque eam causam Zenoni desciscendi fuisse.</p>
+            </div>
+          </div>
+          <div class="place">
+            <div class="place-details">
+              <h3 class="sidebar-subtitle">Records</h3>
+              <p class="paragraph small">An ea, quae per vinitorem antea consequebatur, per se ipsa curabit? Duo Reges: constructio interrete. Longum est enim ad omnia respondere, quae a te dicta sunt. Istic sum, inquit.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="group-section" :class="['page-section', {active: page_is('trips')}]">
+      <div class="container flex-columns">
+        <div class="group-trip">
+          <h2>Meet the team</h2>
+          <p class="paragraph">
+            The cast, the characters, the players, the 'Tunes! When did Michael Jordan get into acting? Who are the Monstars, and how could they possibly make the Tazmanian Devil faint? How long has Bugs been driving Daffy crazy? Read on, and test your knowledge with our Trivia Quiz by hitting the Games button.
+          </p>
+          <p class="paragraph">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quasi ego id curem, quid ille aiat aut neget. Nunc haec primum fortasse audientis servire debemus. Illud urgueam, non intellegere eum quid sibi dicendum sit, cum dolorem summum malum esse dixerit. An potest cupiditas finiri? Duo Reges: constructio interrete. Quem Tiberina descensio festo illo die tanto gaudio affecit, quanto L. Atqui pugnantibus et contrariis studiis consiliisque semper utens nihil quieti videre, nihil tranquilli potest. Non dolere, inquam, istud quam vim habeat postea videro;
+          </p>
+          <p class="paragraph">
+            Illa videamus, quae a te de amicitia dicta sunt. Verum hoc idem saepe faciamus. Similiter sensus, cum accessit ad naturam, tuetur illam quidem, sed etiam se tuetur;
+          </p>
+        </div>
+        <div class="trip-schedule">
+          <h3 class="sidebar-subtitle">Featured</h3>
+          <h4>The Players</h4>
+          <p class="paragraph small">Cui Tubuli nomen odio non est? Sed quot homines, tot sententiae; Qui non moveatur et offensione turpitudinis et comprobatione honestatis? Inde igitur, inquit, ordiendum est. Itaque eos id agere, ut a se dolores, morbos, debilitates repellant. Quid ergo attinet gloriose loqui, nisi constanter loquare? Ergo id est convenienter naturae vivere, a natura discedere. Fatebuntur Stoici haec omnia dicta esse praeclare, neque eam causam Zenoni desciscendi fuisse.</p>
+
+          <h4>The Looney Tunes</h4>
+          <p class="paragraph small">Cui Tubuli nomen odio non est? Sed quot homines, tot sententiae; Qui non moveatur et offensione turpitudinis et comprobatione honestatis? Inde igitur, inquit, ordiendum est. Itaque eos id agere, ut a se dolores, morbos, debilitates repellant. Quid ergo attinet gloriose loqui, nisi constanter loquare? Ergo id est convenienter naturae vivere, a natura discedere. Fatebuntur Stoici haec omnia dicta esse praeclare, neque eam causam Zenoni desciscendi fuisse.</p>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>SPACE JAM, characters, names, and all related.</p>
+    <p>Indicia are trademarks of Warner Bros. © 1996-2018</p>
+  </footer>
+</div>

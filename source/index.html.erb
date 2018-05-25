@@ -1,0 +1,50 @@
+---
+title: Space Jam
+---
+
+<div id="vue-app" v-cloak>
+  <section id="home-page" class="site-page">
+    <div id="stars-1"></div>
+    <div id="stars-2"></div>
+    <div id="stars-3"></div>
+
+    <div class="container">
+      <div class="top-bar" :class="[{active: !page_is('home')}]">
+        <a class="btn-circular" @click="select_page('home')">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+      </div>
+
+      <div :class="['big-logo', {collapsed: !page_is('home')}]">
+        <h1>Space Jam</h1>
+        <nav class="menu">
+          <ul>
+            <li @click="select_page('Behind the team')"><span>Behind the team</span></li>
+            <li @click="select_page('Site Map')"><span>Site Map</span></li>
+            <li @click="select_page('Stellar Souvenirs')"><span>Stellar Souvenirs</span></li>
+            <li @click="select_page('Junior Jam')"><span>Junior Jam</span></li>
+            <li @click="goto('/team.html')"><span>The Lineup</span></li>
+            <li @click="select_page('Jam Central')"><span>Jam Central</span></li>
+            <li @click="select_page('Planet B-Ball')"><span>Planet B-Ball</span></li>
+            <li @click="select_page('Lunar Tunes')"><span>Lunar Tunes</span></li>
+            <li @click="select_page('Jump Station')"><span>Jump Station</span></li>
+            <li @click="select_page('Warner Studio Store')"><span>Warner Studio Store</span></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div :class="['content', {active: !page_is('home')}]">
+        <div class="column">
+          <h2>{{ current_page }}</h2>
+
+          <p>You've made it: Jam Central Station, the central depository for all things Space Jam. From the best seats in the house, you can peruse the production notes, find out about the filmmakers, check out the theatrical trailer, and look at a bunch of photos from the film.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>SPACE JAM, characters, names, and all related.</p>
+    <p>Indicia are trademarks of Warner Bros. © 1996-2018</p>
+  </footer>
+</div>

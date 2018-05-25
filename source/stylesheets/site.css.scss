@@ -1,0 +1,322 @@
+@import "font-awesome";
+
+$cursive: 'Slackey', cursive;
+$sans: 'Tajawal', sans-serif;
+
+$yellow: #fffa21;
+$logo-size: 50vh;
+
+@function white($opacity) {
+  @return rgba(255, 255, 255, $opacity);
+}
+
+@function black($opacity) {
+  @return rgba(0, 0, 0, $opacity);
+}
+
+@function stars($n, $opacity) {
+  $value: '#{random(2000)}px #{random(2000)}px rgba(255, 255, 255, #{$opacity})';
+  @for $i from 2 through $n {
+    $value: '#{$value}, #{random(2000)}px #{random(2000)}px rgba(255, 255, 255, #{$opacity})';
+  }
+  @return unquote($value);
+}
+
+@keyframes stars-animation {
+  from {
+    transform: translateY(0px)
+  }
+  to {
+    transform: translateY(-2000px)
+  }
+}
+
+$rotate-steps: 2;
+
+@keyframes logo-rotate-animation {
+  @for $i from 0 through $rotate-steps {
+    #{100 * $i / $rotate-steps}% {
+      transform:  translateY(($rotate-steps - $i) * 5vh) scale($i / ($rotate-steps + 1)) rotate(#{360 * $i}deg);
+      opacity: ($i / $rotate-steps) * ($i / $rotate-steps);
+    }
+  }
+}
+
+@keyframes logo-scale-animation {
+  from {
+    transform: scale($rotate-steps / ($rotate-steps + 1));
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes logo-collapsed-animation {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50vh + $logo-size * 0.4 * 0.4) scale(0.4);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+[v-cloak] {
+  display: none !important;
+}
+
+html {
+  height: 100%;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+body {
+  background: #040a1b;
+  height: 100%;
+  font-family: $sans;
+  font-size: 16px;
+}
+
+#vue-app {
+  height: 100%;
+  display: flex;
+}
+
+#home-page {
+  background: radial-gradient(ellipse at center, #1B2735 0%, #090A0F 100%);
+  display: flex;
+  flex: 1;
+
+  @for $i from 1 through 3 {
+    #stars-#{$i} {
+      animation: stars-animation #{50 * $i}s linear infinite;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 300vh;
+        z-index: 1;
+      }
+      &, &:after {
+        border-radius: 50%;
+        width: #{$i}px;
+        height: #{$i}px;
+        box-shadow: stars((10 - $i * $i) * 100, $i * 0.333);
+        background: transparent;
+      }
+    }
+  }
+
+  .container {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 2;
+
+    $menu-items-count: 10;
+
+    .top-bar {
+      background-image: linear-gradient(black(0.5), black(0));
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: $logo-size * 0.4;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(-$logo-size * 0.4);
+      transition: opacity 0.6s linear, transform 0.6s ease-in-out;
+
+      &.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      a.btn-circular {
+        display: block;
+        color: white;
+        height: 3em;
+        width: 3em;
+        border-radius: 50%;
+        background: white(0.25);
+        margin: 1em;
+        text-align: center;
+        cursor: pointer;
+        i {
+          line-height: 3em;
+        }
+      }
+    }
+
+    .big-logo {
+      background: url('../images/logo.svg') no-repeat center center;
+      background-size: contain;
+      height: 50vmin;
+      width: 50vmin;
+      opacity: 0;
+      position: relative;
+      transform: scale(0) rotate(0deg);
+      animation: logo-rotate-animation 0.6s linear 1s forwards,
+                 logo-scale-animation 1s cubic-bezier(0, .66, .52, 3.0) 1.6s forwards;
+
+      &.collapsed {
+        animation: logo-collapsed-animation 0.6s cubic-bezier(.45, -0.85, .3, 1) forwards;
+        .menu {
+          ul {
+            li {
+              animation: fade-out 0.6s ease-in-out forwards;
+              animation-delay: 0s !important;
+              pointer-events: none;
+            }
+          }
+        }
+      }
+
+      h1 { display: none; }
+
+      .menu {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        ul {
+          &:hover {
+            li {
+              &:not(:hover):after, &:not(:hover) span {
+                opacity: 0.5;
+              }
+            }
+          }
+
+          li {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            width: $logo-size / 5;
+            height: $logo-size / 5;
+            margin-top: -$logo-size / 10;
+            margin-left: -$logo-size / 10;
+            color: $yellow;
+            font-size: 12px;
+            font-family: $cursive;
+            opacity: 0;
+            animation: fade-in 1.5s ease-in-out 0s forwards;
+            cursor: pointer;
+
+            @for $i from 0 through $menu-items-count {
+              &:nth-child(#{$i}) {
+                transform: rotate(360deg * $i / $menu-items-count) translate($logo-size / 2 * 1.4) rotate(-360deg * $i / $menu-items-count);
+                animation-delay:  2.8s + $i * 0.05;
+
+                &:after {
+                  background: url(../images/menu/#{$i}.svg) no-repeat center center;
+                }
+              }
+            }
+
+            &:after, span {
+              display: block;
+              transition: opacity 600ms ease-in-out;
+            }
+
+            &:after {
+              background-size: contain;
+              content: '';
+              height: 100%;
+            }
+
+            span {
+              position: absolute;
+              bottom: 110%;
+              width: 100%;
+              text-align: center;
+              z-index: 1;
+            }
+          }
+        }
+      }
+    }
+
+    .content {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      top: $logo-size * 0.4;
+      opacity: 0;
+      transform: translateY(100vh);
+      transition: opacity 0s linear, transform 0s cubic-bezier(.15, .08, .45, 1.24);
+      pointer-events: none;
+      padding: 3.3vh 0;
+
+      .column {
+        width: 1024px;
+        margin: 0 auto;
+      }
+
+      &.active {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+        transition-duration: 1s;
+      }
+
+      h2 {
+        color: $yellow;
+        text-align: center;
+        font-family: $cursive;
+        font-size: 2rem;
+      }
+
+      p {
+        margin-top: 2em;
+        color: white;
+        text-align: center;
+        font-family: $cursive;
+        font-size: 1.1rem;
+      }
+
+      img {
+        width: 500px;
+        margin-top: 2em;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  padding: 1rem;
+  p {
+    margin-top: 0.25rem;
+    color: white(0.66);
+    font-size: 0.8rem;
+  }
+}
