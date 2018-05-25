@@ -14,7 +14,7 @@ new Vue
       { name: 'Muggsy', surname: 'Bogues', height: '6ft 5', weight: '206 lb' }
       { name: 'Shawn', surname: ' Bradley', height: '6ft 5', weight: '206 lb' }
     ]
-    current_page: 'trips'
+    current_page: null
     current_user: {}
     group_list_shown: false
 
@@ -24,6 +24,7 @@ new Vue
   created: ->
     _.assign(user, {image: user_images[i]}, order: i + 1) for user, i in @users
     @current_user = @users[0]
+    @select_page('trips')
 
   methods:
     goto: (url) ->
